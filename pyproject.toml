@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agenttrace"
+version = "0.1.0"
+description = "Observability SDK for AI-operated applications"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.135.1",
+    "httpx>=0.28.1",
+    "sqlalchemy>=2.0.48",
+    "uvicorn>=0.42.0",
+]
+
+[project.optional-dependencies]
+fastapi = ["fastapi", "uvicorn[standard]"]
+sqlalchemy = ["sqlalchemy"]
+httpx = ["httpx"]
+all = ["fastapi", "uvicorn[standard]", "sqlalchemy", "httpx"]
+demo = ["fastapi", "uvicorn[standard]", "sqlalchemy", "httpx", "PyJWT", "opaque-carrier-api"]
+dev = ["pytest", "pytest-asyncio", "httpx", "fastapi", "uvicorn[standard]", "sqlalchemy", "PyJWT"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+
+[project.scripts]
+agenttrace = "agenttrace.cli:main"
+
+[tool.uv.sources]
+opaque-carrier-api = { path = "../opaque_carrier_api", editable = true }
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agenttrace"]
